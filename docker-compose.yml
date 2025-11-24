@@ -1,0 +1,35 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cw_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - course_work_mobilki_shutov_mysql_data:/var/lib/mysql
+
+  php:
+    build: ./docker/php
+    container_name: cw_php
+    volumes:
+      - ./public:/var/www/html
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: cw_phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+volumes:
+  course_work_mobilki_shutov_mysql_data:
